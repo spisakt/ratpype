@@ -1,0 +1,108 @@
+#!/usr/bin/env python
+
+########################################################################################
+# INPUTS:
+
+# fMRI 1st level analysis
+
+_BASE_DIR_='/opt/shared2/Altatos_study_2/'
+
+
+
+_SUBJECTS_=\
+[
+#'s_2016040606_a12_iso',
+#'s_2016040605_a11_ipm', # place for comment
+#'s_2016040604_a10_med'
+    's_2016032902_a02_ipm',
+    's_2016032901_a01_iso',
+    's_2016032903_a03_med',
+    's_2016032904_a04_iso',
+    's_2016032905_a05_ipm',
+    's_2016032906_a06_med',
+    's_2016033001_a07_ipm',
+    's_2016033002_a08_iso',
+    's_2016033003_a09_med',
+    's_2016033004_a10_ipm',
+    's_2016033005_a11_iso',
+    's_2016033006_a12_med',
+    's_2016033101_a01_ipm',
+    's_2016033102_a02_med',
+    's_2016033103_a03_iso',
+    's_2016033104_a04_ipm',
+    's_2016033105_a05_med',
+    's_2016033106_a06_iso',
+    's_2016040401_a07_iso',
+    's_2016040402_a08_med',
+    's_2016040403_a09_ipm',
+    's_2016040404_a10_iso',
+    's_2016040405_a11_med',
+    's_2016040501_a01_med',
+    's_2016040502_a02_iso',
+    's_2016040503_a03_ipm',
+    's_2016040504_a04_med',
+    's_2016040505_a05_iso',
+    's_2016040506_a06_ipm',
+    's_2016040601_a07_med',
+    's_2016040602_a08_ipm',
+    's_2016040603_a09_iso',
+    's_2016040604_a10_med',
+    's_2016040605_a11_ipm',
+    's_2016040606_a12_iso'
+]
+
+# fMRI 1st level analysis input pars
+_FWHM_=12
+_TR_=1
+_HIGHPASS_=90 #sec
+_EVENT_FILES_='/opt/shared2/Altatos_study_2/event_files/whisker.run001.txt'
+
+
+cont1 = ['whisker', 'T', ['whisker'], [1.0]]
+cont2 = ['-whisker', 'T', ['whisker', 'whisker'], [-1.0, 0.0]]
+cont3 = ['Task','F', [cont1, cont2]]
+_CONTRASTS_ = [cont1]
+
+########################################################################################################################
+# Additional input parameters
+########################################################################################################################
+_TIME_UNITS_='secs'
+_BASIS_FUNC_={'dgamma': {'derivs' : False}, 'dgamma': {'derivs' : True},}
+_MODEL_SERIAL_CORR_=True
+
+#########################################################################################
+# DataGrabber collecting data
+#########################################################################################
+
+import nipype.interfaces.io as nio
+datasource = nio.DataGrabber(infields=['subject_id'], outfields=['func', 'struct'], sort_filelist=False)
+datasource.inputs.base_directory = _BASE_DIR_
+datasource.inputs.template = '*'
+datasource.inputs.field_template = dict(func=_BASE_DIR_ + '%s/epip_50x50_whiskers_ge_*.nii',
+                                        struct=_BASE_DIR_ + '%s/gems_Bold_*_01*.nii')
+datasource.inputs.template_args = dict(func=[['subject_id']],
+                                       struct=[['subject_id']])
+datasource.inputs.subject_id = _SUBJECTS_
+x=datasource.run()
+
+#########################################################################################
+# following vectors must be defined in order to run process.py
+#########################################################################################
+_FUNC_=x.outputs.func
+_STRUCT_=x.outputs.struct
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
