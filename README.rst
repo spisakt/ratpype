@@ -5,6 +5,7 @@ Ratpype is a collection of additional interfaces and a modular workflow system f
 Some part of the published source code is modified version of nipype and CPAC code.
 
 ******************************************************
-* NOTE:                                              *
-* ratpype is currently in early-phase of development *
+* SORRY!                                             *
+* ratpype is DISCONTINUED.                           *
+* Feel free to use the code!                         *
 ******************************************************
